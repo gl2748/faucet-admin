@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <% include ./partials/head %>
+  <body>
+    <% include ./partials/nav %>
+    <h1><%= title %></h1>
+    <% var location = 'allusers'; %>
+    <% var showActions = false; %>
+    <% include ./partials/users %>
+  </body>
+
+  <script type="text/javascript">
+    function approveUser(id) {
+        alert(id);
+    }
+
+    function rejectUser(id) {
+        alert(id);
+    }
+  </script>
+</html>

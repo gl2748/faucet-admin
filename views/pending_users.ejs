@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <% include ./partials/head %>
+  <body>
+    <% include ./partials/nav %>
+    <h1><%= title %></h1>
+    <% var location = 'pendingusers'; %>
+    <% var showActions = true; %>
+    <% include ./partials/users %>
+    <div class="modal fade" id="approveUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Approve User</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Do you want to <strong>approve</strong> this user ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="javascript:approveUser()">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="rejectUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Approve User</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Do you want to <strong>reject</strong> this user ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="javascript:rejectUser()">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+  </body>
+
+  <script type="text/javascript">
+    var user;
+    function setUser(id) {
+      user = id;
+    }
+    function approveUser() {
+      $.post('/approveuser',
+        { id: user  }
+        )
+        .done(function( data ) {
+          if(data.success) {
+            $('#'+user).remove();
+            alert( "User approved");
+          } else {
+            alert( "An error occurred, please check the console logs");
+            console.log(data);
+          }
+        });
+    }
+
+    function rejectUser() {
+      $.post('/rejectuser',
+        { id: user  }
+      )
+        .done(function( data ) {
+          if(data.success) {
+            $('#'+user).remove();
+            alert( "User rejected");
+          } else {
+            alert( "An error occurred, please check the console logs");
+            console.log(data);
+          }
+        });
+    }
+  </script>
+</html>

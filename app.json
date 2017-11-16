@@ -1,0 +1,35 @@
+{
+  "name": "faucet-admin",
+  "scripts": {
+  },
+  "env": {
+    "DATABASE_NAME": {
+      "required": true
+    },
+    "JAWSDB_URL": {
+      "required": true
+    },
+    "JWT_SECRET": {
+      "required": true
+    },
+    "STAGING_JAWSDB_URL": {
+      "required": true
+    },
+    "SENTRY_DSN": {
+      "required": true
+    },
+    "FAUCET_URL": {
+      "required": true
+    }
+  },
+  "formation": {
+  },
+  "addons": [
+    "jawsdb"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ]
+}
