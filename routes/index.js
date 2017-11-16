@@ -2,13 +2,14 @@ var express = require('express');
 var router = express.Router();
 var jwt = require('jsonwebtoken');
 var fetch = require('isomorphic-fetch');
+var authenticate = require('../helpers/middleware').authenticate;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'Steem Faucet Admin' });
 });
 
-router.get('/pendingusers', function (req, res, next) {
+router.get('/pendingusers', authenticate(), function (req, res, next) {
   var page = parseInt(req.query.page) || 1;
 
   req.db.users.findAll({
@@ -27,7 +28,7 @@ router.get('/pendingusers', function (req, res, next) {
   );
 });
 
-router.get('/allusers', function (req, res, next) {
+router.get('/allusers', authenticate(), function (req, res, next) {
   var page = parseInt(req.query.page) || 1;
 
   req.db.users.findAll(
@@ -47,7 +48,7 @@ router.get('/allusers', function (req, res, next) {
   );
 });
 
-router.post('/approveuser', function (req, res, next) {
+router.post('/approveuser', authenticate(), function (req, res, next) {
   req.db.users.update({
     status: 'approved',
   }, { where: { id: req.body.id } });
@@ -70,10 +71,23 @@ router.post('/approveuser', function (req, res, next) {
     );
 });
 
-router.post('/rejectuser', function (req, res, next) {
+router.post('/rejectuser', authenticate(), function (req, res, next) {
   req.db.users.update({
     status: 'rejected',
   }, { where: { id: req.body.id } });
   res.json({ success: result.success });
 });
+
+router.get('/authenticated', function(req, res, next) {
+  res.render('authenticated', {
+    title: 'Authenticated'
+  });
+});
+
+router.get('/unauthorized', function(req, res, next) {
+  res.render('unauthorized', {
+    title: 'Authorized'
+  });
+});
+
 module.exports = router;

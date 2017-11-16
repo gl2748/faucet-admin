@@ -20,6 +20,18 @@
     },
     "FAUCET_URL": {
       "required": true
+    },
+    "GOOGLE_CLIENT_ID": {
+      "required": true
+    },
+    "GOOGLE_CLIENT_SECRET": {
+      "required": true
+    },
+    "GOOGLE_CALLBACK": {
+      "required": true
+    },
+    "COOKIE_SECRET": {
+      "required": true
     }
   },
   "formation": {
