@@ -53,7 +53,7 @@
       user = id;
     }
     function approveUser() {
-      $.post('/approveuser',
+      $.post('/approve',
         { id: user  }
         )
         .done(function( data ) {
@@ -68,7 +68,7 @@
     }
 
     function rejectUser() {
-      $.post('/rejectuser',
+      $.post('/reject',
         { id: user  }
       )
         .done(function( data ) {

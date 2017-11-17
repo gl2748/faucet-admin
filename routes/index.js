@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Steem Faucet Admin' });
 });
 
-router.get('/pendingusers', authenticate(), function (req, res, next) {
+router.get('/users/pending', authenticate(), function (req, res, next) {
   var page = parseInt(req.query.page) || 1;
 
   req.db.users.findAll({
@@ -19,7 +19,7 @@ router.get('/pendingusers', authenticate(), function (req, res, next) {
     where: { status: 'manual_review' }
   }).then(
     function(users) {
-      res.render('pending_users', {
+      res.render('pending-users', {
         page: page,
         title: 'Pending approval users',
         users: users,
@@ -28,7 +28,7 @@ router.get('/pendingusers', authenticate(), function (req, res, next) {
   );
 });
 
-router.get('/allusers', authenticate(), function (req, res, next) {
+router.get('/users/all', authenticate(), function (req, res, next) {
   var page = parseInt(req.query.page) || 1;
 
   req.db.users.findAll(
@@ -39,7 +39,7 @@ router.get('/allusers', authenticate(), function (req, res, next) {
     }
   ).then(
     function(users) {
-      res.render('all_users', {
+      res.render('all-users', {
         page: page,
         title: 'All users',
         users: users
@@ -48,7 +48,7 @@ router.get('/allusers', authenticate(), function (req, res, next) {
   );
 });
 
-router.post('/approveuser', authenticate(), function (req, res, next) {
+router.post('/approve', authenticate(), function (req, res, next) {
   req.db.users.update({
     status: 'approved',
   }, { where: { id: req.body.id } });
@@ -71,11 +71,11 @@ router.post('/approveuser', authenticate(), function (req, res, next) {
     );
 });
 
-router.post('/rejectuser', authenticate(), function (req, res, next) {
+router.post('/reject', authenticate(), function (req, res, next) {
   req.db.users.update({
     status: 'rejected',
   }, { where: { id: req.body.id } });
-  res.json({ success: result.success });
+  res.json({ success: true });
 });
 
 router.get('/authenticated', function(req, res, next) {
