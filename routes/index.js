@@ -75,7 +75,7 @@ router.post('/reject', authenticate(), function (req, res, next) {
   req.db.users.update({
     status: 'rejected',
   }, { where: { id: req.body.id } });
-  res.json({ success: result.success });
+  res.json({ success: true });
 });
 
 router.get('/authenticated', function(req, res, next) {
