@@ -1,20 +1,6 @@
 {
-  "development": {
-    "use_env_variable": "STAGING_JAWSDB_URL",
-    "dialectOptions": {
-      "ssl": true
-    }
-  },
-  "staging": {
-    "use_env_variable": "STAGING_JAWSDB_URL",
-    "dialectOptions": {
-      "ssl": true
-    }
-  },
-  "production": {
-    "use_env_variable": "JAWSDB_URL",
-    "dialectOptions": {
-      "ssl": true
-    }
+  "use_env_variable": "DATABASE_URL",
+  "dialectOptions": {
+    "ssl": true
   }
 }
