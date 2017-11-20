@@ -74,8 +74,8 @@
             <tr>
                 <td>Fingerprint</td>
                 <td>
-                    <div style="word-wrap: break-word; width:200px;">
-                        <%= JSON.stringify(user.fingerprint) %>
+                    <div>
+                        <pre><%= JSON.stringify(user.fingerprint, null, 2) %></pre>
                     </div>
                 </td>
             </tr>
