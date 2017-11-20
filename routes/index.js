@@ -9,6 +9,19 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Steem Faucet Admin' });
 });
 
+router.get('/user/:id', function(req, res, next) {
+  req.db.users.findOne({
+    where: { id: req.params.id }
+  }).then(
+    function(user) {
+      res.render('user', {
+        title: 'User details',
+        user
+      });
+    }
+  );
+});
+
 router.get('/users/pending', authenticate(), function (req, res, next) {
   var page = parseInt(req.query.page) || 1;
 

@@ -14,7 +14,7 @@
     <% users.forEach(function(user) { %>
     <tr id="<%= user.id %>">
         <td>
-            <%= user.email %>
+            <a href="/user/<%= user.id %>"><%= user.email %></a>
             <% if(user.email_is_verified) { %>
                 <br />
                 <span class="badge badge-success">Verified</span>
