@@ -7,11 +7,11 @@
         <table class="table">
             <tr>
                 <td>Created at</td>
-                <td><%= user.created_at %></td>
+                <td><%= user.created_at && moment(user.created_at).format(moment_format) %></td>
             </tr>
             <tr>
                 <td>Updated at</td>
-                <td><%= user.updated_at %></td>
+                <td><%= user.updated_at && moment(user.updated_at).format(moment_format) %></td>
             </tr>
             <tr>
                 <td>Status</td>
@@ -33,7 +33,7 @@
             </tr>
             <tr>
                 <td>Username booked at</td>
-                <td><%= user.username_booked_at %></td>
+                <td><%= user.username_booked_at && moment(user.username_booked_at).format(moment_format) %></td>
             </tr>
             <tr>
                 <td>Email</td>
@@ -47,7 +47,7 @@
             </tr>
             <tr>
                 <td>Last attempt date</td>
-                <td><%= user.last_attempt_verify_email %></td>
+                <td><%= user.last_attempt_verify_email && moment(user.last_attempt_verify_email).format(moment_format) %></td>
             </tr>
             <tr>
                 <td>Phone number</td>
@@ -61,7 +61,7 @@
             </tr>
             <tr>
                 <td>Last attempt date</td>
-                <td><%= user.last_attempt_verify_phone_number %></td>
+                <td><%= user.last_attempt_verify_phone_number && moment(user.last_attempt_verify_phone_number).format(moment_format) %></td>
             </tr>
             <tr>
                 <td>Phone code</td>

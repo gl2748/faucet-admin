@@ -1,3 +1,4 @@
+const moment = require('moment');
 const express = require('express');
 const path = require('path');
 const favicon = require('serve-favicon');
@@ -7,11 +8,14 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const Raven = require('raven');
+const config = require('./config.json');
 const db = require('./db/models');
 const auth = require('./helpers/auth');
 Raven.config(process.env.NODE_ENV === 'production' && process.env.SENTRY_DSN).install();
 
 var app = express();
+app.locals.moment = moment;
+app.locals.moment_format = config.moment_format;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

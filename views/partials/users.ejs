@@ -1,10 +1,10 @@
 <table class="table">
     <thead>
     <tr>
+        <th>Created at</th>
         <th>Email</th>
         <th>Phone number</th>
         <th>Username</th>
-        <th>Finger print</th>
         <% if(showActions) { %>
             <th>Action</th>
         <% } %>
@@ -13,6 +13,7 @@
     <tbody>
     <% users.forEach(function(user) { %>
     <tr id="<%= user.id %>">
+        <td><%= moment(user.created_at).format(moment_format) %></td>
         <td>
             <a href="/user/<%= user.id %>"><%= user.email %></a>
             <% if(user.email_is_verified) { %>
@@ -28,11 +29,6 @@
             <% } %>
         </td>
         <td><%= user.username %></td>
-        <td>
-            <div style="word-wrap: break-word; width:200px;">
-                <%= JSON.stringify(user.fingerprint) %>
-            </div>
-        </td>
         <% if(showActions) { %>
             <td>
                 <button type="button" class="btn btn-success" onclick="javascript:setUser(<%= user.id %>)" data-toggle="modal" data-target="#approveUserModal">Approve</button>
