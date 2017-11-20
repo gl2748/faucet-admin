@@ -2,7 +2,7 @@ const express = require('express');
 const passport = require('passport');
 const router = express.Router();
 const config = require('../config.json');
-const allowedDomains = config.allowed_domains.join('|');
+const authorizedDomains = config.google_auth_authorized_domains.join('|');
 
 router.get('/google', passport.authenticate('google', {
   scope: ['https://www.googleapis.com/auth/userinfo.email']
@@ -13,7 +13,7 @@ router.get('/google/callback',
   (req, res) => {
     if (
       req.user && req.user.profile && req.user.profile.emails &&
-      req.user.profile.emails.find(o => new RegExp('('+ allowedDomains+')$').test(o.value))
+      req.user.profile.emails.find(o => new RegExp('@('+ authorizedDomains+')$').test(o.value))
     ) {
       req.session.token = req.user.token;
       res.redirect('/authenticated');

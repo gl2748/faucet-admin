@@ -1,3 +1,6 @@
 {
-  "allowed_domains": ["@busy.org","@steemit.com"]
+  "google_auth_authorized_domains": [
+    "busy.org",
+    "steemit.com"
+  ]
 }
