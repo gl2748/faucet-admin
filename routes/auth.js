@@ -16,7 +16,7 @@ router.get('/google/callback',
       req.user.profile.emails.find(o => new RegExp('@('+ authorizedDomains+')$').test(o.value))
     ) {
       req.session.token = req.user.token;
-      res.redirect('/authenticated');
+      res.redirect('/dashboard');
     } else {
       req.session = null;
       res.redirect('/unauthorized');

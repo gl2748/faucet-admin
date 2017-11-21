@@ -1,14 +1,14 @@
-<table class="table">
-    <thead>
-    <tr>
-        <th>Created at</th>
-        <th>Email</th>
-        <th>Phone number</th>
-        <th>Username</th>
-        <% if(showActions) { %>
-            <th>Action</th>
-        <% } %>
-    </tr>
+<table class="table table-sm">
+    <thead class="thead-default">
+        <tr>
+            <th>Created at</th>
+            <th>Email</th>
+            <th>Phone number</th>
+            <th>Username</th>
+            <% if(showActions) { %>
+                <th>Action</th>
+            <% } %>
+        </tr>
     </thead>
     <tbody>
     <% users.forEach(function(user) { %>
@@ -45,6 +45,12 @@
     <% if(page > 1) { %>
         <li class="page-item"><a class="page-link" href="/<%= location %>?page=<%= (page-1) %>">Previous</a></li>
     <% } %>
-    <li class="page-item"><a class="page-link" href="/<%= location %>?page=<%= (page + 1)  %>">Next</a></li>
+    <% if (showLast) { %>
+        <li class="page-item"><a class="page-link" href="/<%= location %>?page=<%= (page + 1)  %>">Next</a></li>
+    <% } %>
 </ul>
 </nav>
+<% if(showActions) { %>
+<% include ../components/user-modal %>
+<% include ../components/result-modal %>
+<% } %>

@@ -41,6 +41,11 @@ app.use(cookieSession({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(function(req, res, next) {
+  res.locals.url   = req.originalUrl;
+  next();
+});
+
 app.use('/', require('./routes/index'));
 app.use('/auth', require('./routes/auth'));
 
