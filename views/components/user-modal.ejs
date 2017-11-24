@@ -8,7 +8,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                Do you want to <strong>approve</strong> this user ?
+                Do you want to <strong>approve</strong> the selected users ?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
@@ -27,7 +27,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                Do you want to <strong>reject</strong> this user ?
+                Do you want to <strong>reject</strong> the selected users ?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
@@ -38,37 +38,51 @@
 </div>
 
 <script type="text/javascript">
-  var user;
+  var users = [];
   function setUser(id) {
-    user = id;
+    users = [id];
   }
+
+  function processResult(data) {
+    if(data.success) {
+      for(var i = 0; i < data.ids.length; i += 1) {
+        $('#'+data.ids[i]).remove();
+      }
+      $('#successModal').modal('show')
+    } else {
+      $('#errorModal').modal('show');
+    }
+  }
+
+  function setUsers() {
+    $('input[type="checkbox"]:checked:not(#toggleAll)').each(function() {
+      users.push($(this).val());
+    });
+  }
+
   function approveUser() {
+    if(users.length === 0) {
+      setUsers();
+    }
     $.post('/approve',
-      { id: user  }
+      { ids: users  }
     )
       .done(function( data ) {
-        if(data.success) {
-          $('#'+user).remove();
-          $('#successModal').modal('show')
-        } else {
-          $('#errorModal').modal('show');
-          console.log(data);
-        }
+        processResult(data);
       });
   }
 
   function rejectUser() {
+    if(users.length === 0) {
+      setUsers();
+    }
+
     $.post('/reject',
-      { id: user  }
+      { ids: users  }
     )
       .done(function( data ) {
-        if(data.success) {
-          $('#'+user).remove();
-          $('#successModal').modal('show')
-        } else {
-          $('#errorModal').modal('show');
-          console.log(data);
-        }
+        processResult(data);
       });
   }
+
 </script>

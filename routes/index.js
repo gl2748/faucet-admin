@@ -117,21 +117,27 @@ const listUser = async(req, res, next, options) => {
 router.post('/approve', authenticate(), (req, res, next) => {
   req.db.users.update({
     status: 'approved',
-  }, { where: { id: req.body.id } });
+  }, { where: { id: req.body['ids[]'] } });
 
-  req.db.users.findOne({ where: { id: req.body.id } })
+  req.db.users.findAll({ where: { id: req.body['ids[]'] } })
     .then(
-      function(user) {
+      function(users) {
+        const emails = [];
+        for(let i = 0; i < users.length; i += 1) {
+          emails.push(users[i].email);
+        }
         const token = jwt.sign({
-          email: user.email,
+          emails,
         }, process.env.JWT_SECRET, { expiresIn: '1d' });
-
         fetch(`${process.env.FAUCET_URL}/api/approve_account?token=${token}`)
           .then(function(response) {
             return response.json();
           })
           .then(function(result) {
-            res.json({ success: result.success });
+            res.json({
+              success: result.success,
+              ids: req.body['ids[]'],
+            });
           });
       }
     );
@@ -140,8 +146,11 @@ router.post('/approve', authenticate(), (req, res, next) => {
 router.post('/reject', authenticate(), (req, res, next) => {
   req.db.users.update({
     status: 'rejected',
-  }, { where: { id: req.body.id } });
-  res.json({ success: true });
+  }, { where: { id: req.body['ids[]'] } });
+  res.json({
+    success: true,
+    ids: req.body['ids[]'],
+  });
 });
 
 router.get('/authenticated', (req, res, next) => {
