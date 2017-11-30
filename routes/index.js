@@ -46,11 +46,11 @@ router.get('/user/:id', (req, res, next) => {
   );
 });
 
-router.get('/users/created', authenticate(), (req, res, next) => {
+router.get('/users/ongoing', authenticate(), (req, res, next) => {
   listUser(req, res, next, {
-    location: 'users/created',
+    location: 'users/ongoing',
     showActions: false,
-    title: 'Created users',
+    title: 'Ongoing users',
     where: { status: null }
   });
 });
@@ -79,6 +79,15 @@ router.get('/users/rejected', authenticate(), (req, res, next) => {
     showActions: true,
     title: 'Rejected users',
     where: { status: 'rejected' }
+  });
+});
+
+router.get('/users/created', authenticate(), (req, res, next) => {
+  listUser(req, res, next, {
+    location: 'users/created',
+    showActions: false,
+    title: 'Created users',
+    where: { status: 'created' }
   });
 });
 

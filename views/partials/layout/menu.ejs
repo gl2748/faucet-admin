@@ -17,8 +17,8 @@
                         <i class="fa arrow"></i>
                     </a>
                     <ul class="sidebar-nav">
-                        <li class="<%= url.includes('/users/created') ? 'active' : '' %>">
-                            <a href="/users/created"> Created </a>
+                        <li class="<%= url.includes('/users/ongoing') ? 'active' : '' %>">
+                            <a href="/users/ongoing"> Ongoing </a>
                         </li>
                         <li class="<%= url.includes('/users/pending') ? 'active' : '' %>">
                             <a href="/users/pending"> Pending </a>
@@ -28,6 +28,9 @@
                         </li>
                         <li class="<%= url.includes('/users/rejected') ? 'active' : '' %>">
                             <a href="/users/rejected"> Rejected </a>
+                        </li>
+                        <li class="<%= url.includes('/users/created') ? 'active' : '' %>">
+                            <a href="/users/created"> Created </a>
                         </li>
                         <li class="<%= url.includes('/users/all') ? 'active' : '' %>">
                             <a href="/users/all"> All </a>
