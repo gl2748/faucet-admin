@@ -11,7 +11,7 @@
                         <h1><%= title %></h1>
                         <div class="card">
                             <div class="card-block">
-                                <table class="table">
+                                <table class="table user-table">
                                     <tr>
                                         <td>Created at</td>
                                         <td><%= user.created_at && moment(user.created_at).format(moment_format) %></td>
@@ -83,6 +83,14 @@
                                         <td>
                                             <div>
                                                 <pre><%= JSON.stringify(user.fingerprint, null, 2) %></pre>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Metadata</td>
+                                        <td>
+                                            <div>
+                                                <pre><%= JSON.stringify(user.metadata, null, 2) %></pre>
                                             </div>
                                         </td>
                                     </tr>
