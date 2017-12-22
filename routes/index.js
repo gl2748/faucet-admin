@@ -12,7 +12,7 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/dashboard', async(req, res, next) => {
-  const created = await req.db.users
+  const ongoing = await req.db.users
     .count({ where: { status: null } });
   const rejected = await req.db.users
     .count({ where: { status: 'rejected' } });
@@ -20,11 +20,14 @@ router.get('/dashboard', async(req, res, next) => {
     .count({ where: { status: 'approved' } });
   const pending = await req.db.users
     .count({ where: { status: 'manual_review' } });
+  const created = await req.db.users
+    .count({ where: { status: 'created' } });
   const all = await req.db.users
     .count();
 
   res.render('dashboard', {
     title: 'Dashboard',
+    ongoing,
     approved,
     rejected,
     pending,

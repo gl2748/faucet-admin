@@ -10,17 +10,17 @@
                     <section class="section">
                         <div class="row">
                             <div class="col-xl-4">
-                                <div class="card card-primary">
+                                <div class="card card-card-default">
                                     <div class="card-header">
                                         <div class="header-block">
-                                            <p class="title"> Created users </p>
+                                            <p class="title"> Ongoing users </p>
                                         </div>
                                     </div>
                                     <div class="card-block">
-                                        <h1><%= created %></h1>
+                                        <h1><%= ongoing %></h1>
                                     </div>
                                     <div class="card-footer">
-                                        <a href="/users/created">View users</a>
+                                        <a href="/users/ongoing">View users</a>
                                     </div>
                                 </div>
                             </div>
@@ -68,6 +68,21 @@
                                     </div>
                                     <div class="card-footer">
                                         <a href="/users/rejected">View users</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4">
+                                <div class="card card-primary">
+                                    <div class="card-header">
+                                        <div class="header-block">
+                                            <p class="title"> Created users </p>
+                                        </div>
+                                    </div>
+                                    <div class="card-block">
+                                        <h1><%= created %></h1>
+                                    </div>
+                                    <div class="card-footer">
+                                        <a href="/users/created">View users</a>
                                     </div>
                                 </div>
                             </div>
