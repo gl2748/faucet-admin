@@ -11,7 +11,7 @@ router.get('/', (req, res, next) => {
   res.render('index', { title: 'Log in to continue' });
 });
 
-router.get('/dashboard', async(req, res, next) => {
+router.get('/dashboard', authenticate(), async(req, res, next) => {
   const ongoing = await req.db.users
     .count({ where: { status: null } });
   const rejected = await req.db.users
@@ -36,7 +36,7 @@ router.get('/dashboard', async(req, res, next) => {
   });
 });
 
-router.get('/user/:id', (req, res, next) => {
+router.get('/user/:id', authenticate(), (req, res, next) => {
   req.db.users.findOne({
     where: { id: req.params.id }
   }).then(
@@ -162,18 +162,6 @@ router.post('/reject', authenticate(), (req, res, next) => {
   res.json({
     success: true,
     ids: req.body['ids[]'],
-  });
-});
-
-router.get('/authenticated', (req, res, next) => {
-  res.render('authenticated', {
-    title: 'Authenticated'
-  });
-});
-
-router.get('/unauthorized', (req, res, next) => {
-  res.render('unauthorized', {
-    title: 'Authorized'
   });
 });
 
