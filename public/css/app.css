@@ -71,8 +71,7 @@ body {
     font-weight: 600;
     margin: 0; }
   .auth-container .auth-content {
-    padding: 30px 50px;
-    min-height: 260px; }
+    padding: 30px 50px; }
   .auth-container .forgot-btn {
     line-height: 28px; }
   .auth-container .checkbox label {
