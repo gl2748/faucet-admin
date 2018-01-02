@@ -11,6 +11,10 @@ router.get('/', (req, res, next) => {
   res.render('index', { title: 'Log in to continue' });
 });
 
+router.get('/.well-known/healthcheck.json', (req, res) => {
+  res.json({ ok: true, date: new Date().toISOString() });
+});
+
 router.get('/dashboard', authenticate(), async(req, res, next) => {
   const ongoing = await req.db.users
     .count({ where: { status: null } });
