@@ -45,8 +45,12 @@
 
   function processResult(data) {
     if(data.success) {
-      for(var i = 0; i < data.ids.length; i += 1) {
-        $('#'+data.ids[i]).remove();
+      if(Array.isArray(data.ids)) {
+        for(var i = 0; i < data.ids.length; i += 1) {
+          $('#'+data.ids[i]).remove();
+        }
+      } else {
+        $('#'+data.ids).remove();
       }
       $('#successModal').modal('show')
     } else {
