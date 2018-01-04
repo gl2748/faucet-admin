@@ -131,10 +131,6 @@ const listUser = async(req, res, next, options) => {
 }
 
 router.post('/approve', authenticate(), (req, res, next) => {
-  req.db.users.update({
-    status: 'approved',
-  }, { where: { id: req.body['ids[]'] } });
-
   req.db.users.findAll({ where: { id: req.body['ids[]'] } })
     .then(
       function(users) {
@@ -149,9 +145,15 @@ router.post('/approve', authenticate(), (req, res, next) => {
           .then(function(response) {
             return response.json();
           })
-          .then(function(result) {
+          .then(async function(result) {
+            if(result.success) {
+              await req.db.users.update({
+                status: 'approved',
+              }, { where: { id: req.body['ids[]'] } });
+            }
             res.json({
               success: result.success,
+              errors: result.errors,
               ids: req.body['ids[]'],
             });
           });
