@@ -26,6 +26,9 @@
     },
     "COOKIE_SECRET": {
       "required": true
+    },
+    "AUTHORIZED_EMAILS": {
+      "required": true
     }
   },
   "formation": {
