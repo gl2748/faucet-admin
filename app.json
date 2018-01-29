@@ -29,6 +29,9 @@
     },
     "AUTHORIZED_EMAILS": {
       "required": true
+    },
+    "AUTHORIZED_DOMAINS": {
+      "required": false
     }
   },
   "formation": {
