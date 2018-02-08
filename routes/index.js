@@ -171,4 +171,12 @@ router.post('/reject', authenticate(), (req, res, next) => {
   });
 });
 
+router.post('/delete', authenticate(), (req, res, next) => {
+  req.db.users.destroy({ where: { id: req.body['ids[]'] } });
+  res.json({
+    success: true,
+    ids: req.body['ids[]'],
+  });
+});
+
 module.exports = router;

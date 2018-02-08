@@ -1,8 +1,8 @@
-<div class="modal fade" id="approveUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="approveUserModal" tabindex="-1" role="dialog" aria-labelledby="Approve Users" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Approve User</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Approve Users</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -17,11 +17,11 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="rejectUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="rejectUserModal" tabindex="-1" role="dialog" aria-labelledby="Reject Users" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Approve User</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Reject Users</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -36,6 +36,44 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="Delete users" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete Users</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Do you want to <strong>delete</strong> the selected users ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="javascript:deleteUser()">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="noSelectedUsersModal" tabindex="-1" role="dialog" aria-labelledby="No users selected" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Select Users</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Please select at least one user.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script type="text/javascript">
   var users = [];
@@ -52,9 +90,20 @@
       } else {
         $('#'+data.ids).remove();
       }
-      $('#successModal').modal('show')
+      $('#successModal').modal('show');
     } else {
       $('#errorModal').modal('show');
+    }
+  }
+
+  function prepareAction(action) {
+    if(users.length === 0) {
+      setUsers();
+    }
+    if(users.length === 0) {
+      $('#noSelectedUsersModal').modal('show');
+    } else {
+    $('#' + action + 'Modal').modal('show');
     }
   }
 
@@ -65,9 +114,6 @@
   }
 
   function approveUser() {
-    if(users.length === 0) {
-      setUsers();
-    }
     $.post('/approve',
       { ids: users  }
     )
@@ -77,11 +123,16 @@
   }
 
   function rejectUser() {
-    if(users.length === 0) {
-      setUsers();
-    }
-
     $.post('/reject',
+      { ids: users  }
+    )
+      .done(function( data ) {
+        processResult(data);
+      });
+  }
+
+  function deleteUser() {
+    $.post('/delete',
       { ids: users  }
     )
       .done(function( data ) {

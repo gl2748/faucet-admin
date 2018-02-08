@@ -1,9 +1,7 @@
 <table class="table table-sm">
     <thead class="thead-default">
         <tr>
-            <% if(showActions) { %>
-                <th><input type="checkbox" onclick="javascript:toggleAll()" id="toggleAll" /></th>
-            <% } %>
+            <th><input type="checkbox" onclick="javascript:toggleAll()" id="toggleAll" /></th>
             <th>Created at</th>
             <th>Email</th>
             <th>Phone number</th>
@@ -13,11 +11,9 @@
     <tbody>
     <% users.forEach(function(user) { %>
     <tr id="<%= user.id %>">
-        <% if(showActions) { %>
-            <td>
-                <input type="checkbox" value="<%= user.id %>" />
-            </td>
-        <% } %>
+        <td>
+            <input type="checkbox" value="<%= user.id %>" />
+        </td>
         <td><%= moment(user.created_at).format(moment_format) %></td>
         <td>
             <a href="/user/<%= user.id %>"><%= user.email %></a>
@@ -39,10 +35,12 @@
     </tbody>
 </table>
 <% if(showActions) { %>
-    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#approveUserModal">Approve</button>
+    <button type="button" class="btn btn-success" onclick="javascript:prepareAction('approveUser')">Approve</button>
     &nbsp;&nbsp;
-    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#rejectUserModal">Reject</button>
+    <button type="button" class="btn btn-warning" onclick="javascript:prepareAction('rejectUser')">Reject</button>
+    &nbsp;&nbsp;
 <% } %>
+<button type="button" class="btn btn-danger" onclick="javascript:prepareAction('deleteUser')">Delete</button>
 <nav aria-label="Page navigation example">
 <ul class="pagination">
     <% if(page > 1) { %>
@@ -53,7 +51,6 @@
     <% } %>
 </ul>
 </nav>
-<% if(showActions) { %>
 <% include ../components/user-modal %>
 <% include ../components/result-modal %>
 <script type="text/javascript">
@@ -66,4 +63,3 @@
     );
   }
 </script>
-<% } %>
