@@ -81,6 +81,10 @@
     users = [id];
   }
 
+  function showError() {
+    $('#errorModal').modal('show');
+  }
+
   function processResult(data) {
     if(data.success) {
       if(Array.isArray(data.ids)) {
@@ -97,9 +101,7 @@
   }
 
   function prepareAction(action) {
-    if(users.length === 0) {
-      setUsers();
-    }
+    setUsers();
     if(users.length === 0) {
       $('#noSelectedUsersModal').modal('show');
     } else {
@@ -108,6 +110,7 @@
   }
 
   function setUsers() {
+    users = [];
     $('input[type="checkbox"]:checked:not(#toggleAll)').each(function() {
       users.push($(this).val());
     });
@@ -119,6 +122,9 @@
     )
       .done(function( data ) {
         processResult(data);
+      })
+      .fail(function() {
+        showError();
       });
   }
 
@@ -128,6 +134,9 @@
     )
       .done(function( data ) {
         processResult(data);
+      })
+      .fail(function() {
+        showError();
       });
   }
 
@@ -137,6 +146,9 @@
     )
       .done(function( data ) {
         processResult(data);
+      })
+      .fail(function() {
+        showError();
       });
   }
 
