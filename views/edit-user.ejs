@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <% include ./partials/layout/head %>
+    <body>
+        <div class="main-wrapper">
+            <div class="app" id="app">
+                <% include ./partials/layout/header %>
+                <% include ./partials/layout/menu.ejs %>
+                <article class="content">
+                    <section class="section">
+                        <h1><%= title %></h1>
+                        <div class="card">
+                            <div class="card-block">
+                                <form action="/user/edit" method="POST">
+                                    <input type="hidden" name="id" value="<%= user.id%>"/>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 form-control-label">Status</label>
+                                        <div class="col-sm-10">
+                                            <select name="status" class="form-control">
+                                                <option value="approved" <% if(user.status === 'approved') { %>selected="selected"<%}%>>Approved</option>
+                                                <option value="rejected" <% if(user.status === 'rejected') { %>selected="selected"<%}%>>Rejected</option>
+                                                <option value="manual_review" <% if(user.status === 'manual_review') { %>selected="selected"<%}%>>Manual review</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 form-control-label">Username</label>
+                                        <div class="col-sm-10">
+                                            <input name="username" type="text" class="form-control" value="<%= user.username %>" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 form-control-label">Email</label>
+                                        <div class="col-sm-10">
+                                            <input name="email" type="email" class="form-control" value="<%= user.email %>" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 form-control-label">Email verified</label>
+                                        <div class="col-sm-10">
+                                            <label>
+                                                <input name="email_is_verified" type="checkbox" <% if(user.email_is_verified) { %>checked="checked"<% } %>>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 form-control-label">Phone number</label>
+                                        <div class="col-sm-10">
+                                            <input name="phone_number" type="text" class="form-control" value="<%= user.phone_number %>" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 form-control-label">Phone number verified</label>
+                                        <div class="col-sm-10">
+                                            <label>
+                                                <input name="phone_number_is_verified" type="checkbox" <% if(user.phone_number_is_verified) { %>checked="checked"<% } %>>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 form-control-label">Phone code</label>
+                                        <div class="col-sm-10">
+                                            <input name="phone_code" type="text" class="form-control" value="<%= user.phone_code %>" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 form-control-label">Ip</label>
+                                        <div class="col-sm-10">
+                                            <input name="ip" type="text" class="form-control" value="<%= user.ip %>" />
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-secondary">Save</button>
+                                </form>
+                            </div>
+                        </div>
+                    </section>
+                </article>
+            </div>
+        </div>
+    </body>
+</html>

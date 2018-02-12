@@ -53,6 +53,49 @@ router.get('/user/:id', authenticate(), (req, res, next) => {
   );
 });
 
+router.get('/user/edit/:id', authenticate(), (req, res, next) => {
+  req.db.users.findOne({
+    where: { id: req.params.id }
+  }).then(
+    function(user) {
+      res.render('edit-user', {
+        title: 'Edit user',
+        user
+      });
+    }
+  );
+});
+
+router.post('/user/edit', authenticate(), (req, res, next) => {
+  console.log(req.body);
+
+  req.db.users.update({
+    status: req.body.status,
+    username: req.body.username,
+    email: req.body.email,
+    email_is_verified: req.body.email_is_verified === 'on',
+    phone_number: req.body.phone_number,
+    phone_number_is_verified: req.body.phone_number_is_verified === 'on',
+    phone_code: req.body.phone_code,
+    ip: req.body.ip,
+  }, {
+    where: { id: req.body.id }
+  })
+    .then(function() {
+      req.db.users.findOne({
+        where: { id: req.body.id }
+      }).then(
+        function(user) {
+          res.render('edit-user', {
+            title: 'Edit user',
+            user
+          });
+        }
+      );
+    }
+  );
+});
+
 router.get('/users/ongoing', authenticate(), (req, res, next) => {
   listUser(req, res, next, {
     location: 'users/ongoing',

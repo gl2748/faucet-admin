@@ -8,6 +8,7 @@
             <th>Email</th>
             <th>Phone number</th>
             <th>Username</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -34,6 +35,7 @@
             <% } %>
         </td>
         <td><%= user.username %></td>
+        <td><a href="/user/edit/<%= user.id %>"><button type="button" class="btn">Edit</button></a></td>
     </tr>
     <% }); %>
     </tbody>
