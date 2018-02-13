@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const Raven = require('raven');
+const geoip = require('./helpers/maxmind');
 const config = require('./config.json');
 const db = require('./db/models');
 const auth = require('./helpers/auth');
@@ -56,6 +57,7 @@ auth(passport);
 app.use(passport.initialize());
 app.use(function(req, res, next) {
   req.db = db;
+  req.geoip = geoip;
   next();
 });
 

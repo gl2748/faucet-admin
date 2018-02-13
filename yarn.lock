@@ -33,6 +33,10 @@ base64url@2.0.0, base64url@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/base64url/-/base64url-2.0.0.tgz#eac16e03ea1438eff9423d69baa36262ed1f70bb"
 
+big-integer@^1.6.22:
+  version "1.6.26"
+  resolved "https://registry.yarnpkg.com/big-integer/-/big-integer-1.6.26.tgz#3af1672fa62daf2d5ecafacf6e5aa0d25e02c1c8"
+
 bluebird@^3.4.6:
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.1.tgz#d9551f9de98f1fcda1e683d17ee91a0602ee2eb9"
@@ -416,6 +420,13 @@ lru-cache@^4.1.1:
 lsmod@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/lsmod/-/lsmod-1.0.0.tgz#9a00f76dca36eb23fa05350afe1b585d4299e64b"
+
+maxmind@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/maxmind/-/maxmind-2.4.0.tgz#a9a380a39e35099620520d22ba00c551ee19f3ee"
+  dependencies:
+    big-integer "^1.6.22"
+    tiny-lru "^1.4.13"
 
 media-typer@0.3.0:
   version "0.3.0"
@@ -811,6 +822,10 @@ terraformer@~1.0.5:
 timed-out@4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/timed-out/-/timed-out-4.0.1.tgz#f32eacac5a175bea25d7fab565ab3ed8741ef56f"
+
+tiny-lru@^1.4.13:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/tiny-lru/-/tiny-lru-1.5.0.tgz#aa5fb1d22fcdd8aa1ff2d7b04c13357cfc997167"
 
 toposort-class@^1.0.1:
   version "1.0.1"

@@ -45,6 +45,10 @@ router.get('/user/:id', authenticate(), (req, res, next) => {
     where: { id: req.params.id }
   }).then(
     function(user) {
+      const lookup = req.geoip.get(user.ip);
+      if(lookup) {
+        user.country = lookup.country.iso_code;
+      }
       res.render('user', {
         title: 'User details',
         user
