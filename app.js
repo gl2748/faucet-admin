@@ -2,7 +2,6 @@ const moment = require('moment');
 const express = require('express');
 const path = require('path');
 const favicon = require('serve-favicon');
-const logger = require('morgan');
 const cookieSession = require('cookie-session');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
@@ -11,11 +10,42 @@ const Raven = require('raven');
 const config = require('./config.json');
 const db = require('./db/models');
 const auth = require('./helpers/auth');
+const logger = require('./helpers/logger');
+
 Raven.config(process.env.NODE_ENV === 'production' && process.env.SENTRY_DSN).install();
 
 var app = express();
 app.locals.moment = moment;
 app.locals.moment_format = config.moment_format;
+
+// logging middleware
+app.use((req, res, next) => {
+  const start = process.hrtime();
+  const reqId = req.headers['x-amzn-trace-id'] ||
+    req.headers['x-request-id'] ||
+    `dev-${Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)}`;
+  const reqIp = req.headers['x-forwarded-for'] ||
+    req.connection.remoteAddress;
+  req.log = logger.child({ req_id: reqId, ip: reqIp });
+  req.log.debug({ req }, '<-- request');
+  res.set('X-Request-Id', reqId);
+  const logOut = () => {
+    const delta = process.hrtime(start);
+    const info = {
+      ms: (delta[0] * 1e3) + (delta[1] / 1e6),
+      code: res.statusCode,
+    };
+    req.log.info(info, '%s %s%s', req.method, req.baseUrl, req.url);
+    req.log.debug({ res }, '--> response');
+  };
+  res.once('finish', logOut);
+  res.once('close', logOut);
+  next();
+});
+
+if (process.env.NODE_ENV !== 'production') {
+  logger.info('running in development mode');
+}
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -29,9 +59,6 @@ app.use(function(req, res, next) {
   next();
 });
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieSession({
