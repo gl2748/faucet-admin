@@ -5,7 +5,12 @@ var path      = require('path');
 var Sequelize = require('sequelize');
 var basename  = path.basename(module.filename);
 var config    = require(__dirname + '/../config/config.json');
+var logger    = require(__dirname + '/../../helpers/logger').child({module: 'db'});
 var db        = {};
+
+config.logging = function(msg) {
+  logger.debug(msg);
+};
 
 if (config.use_env_variable) {
   var sequelize = new Sequelize(process.env[config.use_env_variable], config);
