@@ -84,7 +84,7 @@ router.get('/user/:id', authenticate(), routeMiddleware(async (req) => {
   });
   const lookup = req.geoip.get(user.ip);
   if(lookup) {
-    user.country = lookup.country.iso_code;
+    user.country = `${lookup.country.iso_code} ${lookup.country.names.en}`;
   }
   return {
     view: 'user',
