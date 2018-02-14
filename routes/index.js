@@ -91,23 +91,21 @@ router.get('/user/:id', authenticate(), routeMiddleware(async (req) => {
   }
 }));
 
-router.get('/user/edit/:id', authenticate(), (req, res, next) => {
-  req.db.users.findOne({
+router.get('/user/edit/:id', authenticate(), routeMiddleware(async (req) => {
+  const user = await req.db.users.findOne({
     where: { id: req.params.id }
-  }).then(
-    function(user) {
-      res.render('edit-user', {
-        title: 'Edit user',
-        user
-      });
+  });
+  return {
+    view: 'edit-user',
+    data: {
+      title: 'Edit user',
+      user
     }
-  );
-});
+  };
+}));
 
-router.post('/user/edit', authenticate(), (req, res, next) => {
-  console.log(req.body);
-
-  req.db.users.update({
+router.post('/user/edit', authenticate(), routeMiddleware(async (req) => {
+  await req.db.users.update({
     status: req.body.status,
     username: req.body.username,
     email: req.body.email,
@@ -118,21 +116,20 @@ router.post('/user/edit', authenticate(), (req, res, next) => {
     ip: req.body.ip,
   }, {
     where: { id: req.body.id }
-  })
-    .then(function() {
-        req.db.users.findOne({
-          where: { id: req.body.id }
-        }).then(
-          function(user) {
-            res.render('edit-user', {
-              title: 'Edit user',
-              user
-            });
-          }
-        );
-      }
-    );
-});
+  });
+
+  const user = await req.db.users.findOne({
+    where: { id: req.body.id }
+  });
+
+  return {
+    view: 'edit-user',
+    data: {
+      title: 'Edit user',
+      user
+    }
+  };
+}));
 
 router.get('/users/ongoing', authenticate(), routeMiddleware(async (req) => {
   return listUser(req, {
