@@ -3,5 +3,5 @@
     "busy.org",
     "steemit.com"
   ],
-  "moment_format": "DD/MM/YYYY"
+  "moment_format": "DD/MM/YYYY HH:mm:ss"
 }
