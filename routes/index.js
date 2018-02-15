@@ -201,25 +201,27 @@ router.post('/approve', authenticate(), routeMiddleware(async (req) => {
 }));
 
 router.post('/reject', authenticate(), routeMiddleware(async (req) => {
+  const ids = [].concat(req.body['ids[]']);
   req.db.users.update({
     status: 'rejected',
-  }, { where: { id: req.body['ids[]'] } });
+  }, { where: { id: ids } });
   return {
     data: {
       success: true,
-      ids: req.body['ids[]'],
+      ids,
     }
   }
 }));
 
-router.post('/delete', authenticate(), (req, res, next) => {
-  req.db.users.destroy({ where: { id: req.body['ids[]'] } })
-    .then(function (rows) {
-      res.json({
-        success: rows === req.body['ids[]'].length,
-        ids: req.body['ids[]'],
-      });
-    });
-});
+router.post('/delete', authenticate(), routeMiddleware(async (req) => {
+  const ids = [].concat(req.body['ids[]']);
+  const rows = await req.db.users.destroy({ where: { id: ids } });
+  return {
+    data: {
+      success: rows === ids.length,
+      ids,
+    }
+  }
+}));
 
 module.exports = router;
