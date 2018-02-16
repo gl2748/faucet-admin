@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<% include ./partials/layout/head %>
+<body>
+<div class="main-wrapper">
+    <div class="app" id="app">
+        <% include ./partials/layout/header %>
+        <% include ./partials/layout/menu.ejs %>
+        <article class="content">
+            <section class="section">
+                <h1><%= title %></h1>
+                <div class="card">
+                    <div class="card-block">
+                        <form action="/search" method="POST">
+                            <input type="hidden" name="page" id="page" value="1" />
+                            <div class="form-group">
+                                <label class="control-label">Type your search in JSON</label>
+                                <input type="text" name="search" class="form-control boxed" placeholder="{ip: '::1'}"/>
+                            </div>
+                            <button type="submit" class="btn btn-secondary">Search</button>
+                        </form>
+                    </div>
+                </div>
+                <table class="table table-sm">
+                    <thead class="thead-default">
+                        <tr>
+                            <th>Created at</th>
+                            <th>Email</th>
+                            <th>Phone number</th>
+                            <th>Username</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <% users.forEach(function(user) { %>
+                        <tr id="<%= user.id %>">
+                            <td><%= moment(user.created_at).format(moment_format) %></td>
+                            <td>
+                                <a href="/user/<%= user.id %>"><%= user.email %></a>
+                                <% if(user.email_is_verified) { %>
+                                <br />
+                                <span class="badge badge-success">Verified</span>
+                                <% } %>
+                            </td>
+                            <td>
+                                <%= user.phone_number %>
+                                <% if(user.phone_number_is_verified) { %>
+                                <br />
+                                <span class="badge badge-success">Verified (<%= user.phone_code_attempts %> attempts)</span>
+                                <% } %>
+                            </td>
+                            <td><%= user.username %></td>
+                        </tr>
+                    <% }); %>
+                    </tbody>
+                </table>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <% if(page > 1) { %>
+                        <li class="page-item"><a class="page-link" href="/<%= location %>?page=<%= (page-1) %>">Previous</a></li>
+                        <% } %>
+                        <% if (showLast) { %>
+                        <li class="page-item"><a class="page-link" href="/<%= location %>?page=<%= (page + 1)  %>">Next</a></li>
+                        <% } %>
+                    </ul>
+                </nav>
+            </section>
+        </article>
+    </div>
+</div>
+<% include ./partials/layout/scripts %>
+</body>
+</html>

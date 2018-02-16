@@ -212,4 +212,37 @@ router.post('/reject', authenticate(), routeMiddleware(async (req) => {
   }
 }));
 
+router.get('/search', authenticate(), (req, res, next) => {
+  res.render('search', {
+    title: 'Search database',
+    users: [],
+    page: 1,
+    showLast: false,
+  });
+});
+
+router.post('/search', authenticate(), routeMiddleware(async (req) => {
+  const page = parseInt(req.body.page) || 1;
+  const count = await req.db.users.count({ where: JSON.parse(req.body.search) });
+
+  const users = await req.db.users.findAll(
+    {
+      order: [['updated_at', 'DESC']],
+      offset: parseInt((page - 1) * elements),
+      limit: elements,
+      where: JSON.parse(req.body.search)
+    }
+  );
+
+  return {
+    view: 'search',
+    data: {
+      title: 'Search database',
+      page: page,
+      showLast: count > page * elements,
+      users
+    }
+  }
+}));
+
 module.exports = router;
