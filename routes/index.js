@@ -42,7 +42,7 @@ function routeMiddleware(handler) {
   };
 }
 
-/* GET home page. */
+/* GET home page. */ 
 router.get('/', (req, res, next) => {
   res.render('index', { title: 'Log in to continue' });
 });
