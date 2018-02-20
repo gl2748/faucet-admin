@@ -215,6 +215,7 @@ router.post('/reject', authenticate(), routeMiddleware(async (req) => {
 
 router.post('/delete', authenticate(), routeMiddleware(async (req) => {
   const ids = [].concat(req.body['ids[]']);
+  await req.db.actions.destroy({ where: { user_id: ids } });
   const rows = await req.db.users.destroy({ where: { id: ids } });
   return {
     data: {
