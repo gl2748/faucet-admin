@@ -1,9 +1,5 @@
 module.exports = (sequelize, DataTypes) => (
   sequelize.define('users', {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-    },
     email: DataTypes.STRING,
     email_is_verified: DataTypes.BOOLEAN,
     last_attempt_verify_email: DataTypes.DATE,
