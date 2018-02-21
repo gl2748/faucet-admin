@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const fetch = require('isomorphic-fetch');
+const Sequelize = require('sequelize');
 const authenticate = require('../helpers/middleware').authenticate;
 
 const elements = 25;
@@ -218,19 +219,48 @@ router.get('/search', authenticate(), (req, res, next) => {
     users: [],
     page: 1,
     showLast: false,
+    search: '',
+    items: elements
   });
 });
 
 router.post('/search', authenticate(), routeMiddleware(async (req) => {
   const page = parseInt(req.body.page) || 1;
-  const count = await req.db.users.count({ where: JSON.parse(req.body.search) });
-
+  const search = req.body.search;
+  const Op = Sequelize.Op;
+  const where = {
+    [Op.or]: [
+      {
+        email: {
+          [Op.like]: `%${search}%`
+        }
+      },
+      {
+        username: {
+          [Op.like]: `%${search}%`
+        },
+      },
+      {
+        phone_number: {
+          [Op.like]: `%${search}%`
+        },
+      },
+      {
+        ip: {
+          [Op.like]: `%${search}%`
+        },
+      }
+    ],
+  };
+  const count = await req.db.users.count({ where });
+  const items = req.body.items || elements;
   const users = await req.db.users.findAll(
     {
       order: [['updated_at', 'DESC']],
-      offset: parseInt((page - 1) * elements),
-      limit: elements,
-      where: JSON.parse(req.body.search)
+      offset: parseInt((page - 1) * items),
+      limit: parseInt(items),
+      page,
+      where
     }
   );
 
@@ -238,9 +268,11 @@ router.post('/search', authenticate(), routeMiddleware(async (req) => {
     view: 'search',
     data: {
       title: 'Search database',
-      page: page,
-      showLast: count > page * elements,
-      users
+      page,
+      showLast: count > page * items,
+      users,
+      search,
+      items
     }
   }
 }));
