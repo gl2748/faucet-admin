@@ -220,37 +220,28 @@ router.get('/search', authenticate(), (req, res, next) => {
     page: 1,
     showLast: false,
     search: '',
+    status: null,
     items: elements
   });
 });
 
 router.post('/search', authenticate(), routeMiddleware(async (req) => {
   const page = parseInt(req.body.page) || 1;
-  const search = req.body.search;
+  const { search, status } = req.body;
   const Op = Sequelize.Op;
   const where = {
-    [Op.or]: [
+    [Op.and]: [
       {
-        email: {
-          [Op.like]: `%${search}%`
-        }
+        [Op.or]: [
+          {email: {[Op.like]: `%${search}%`}},
+          {username: {[Op.like]: `%${search}%`}},
+          {phone_number: {[Op.like]: `%${search}%`}},
+          {ip: {[Op.like]: `%${search}%`}},
+          {fingerprint: {[Op.like]: `%${search}%`}},
+        ]
       },
-      {
-        username: {
-          [Op.like]: `%${search}%`
-        },
-      },
-      {
-        phone_number: {
-          [Op.like]: `%${search}%`
-        },
-      },
-      {
-        ip: {
-          [Op.like]: `%${search}%`
-        },
-      }
-    ],
+      { status },
+    ]
   };
   const count = await req.db.users.count({ where });
   const items = req.body.items || elements;
@@ -272,6 +263,7 @@ router.post('/search', authenticate(), routeMiddleware(async (req) => {
       showLast: count > page * items,
       users,
       search,
+      status,
       items
     }
   }
