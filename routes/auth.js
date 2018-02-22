@@ -10,12 +10,18 @@ router.get('/google', passport.authenticate('google', {
 
 router.get('/google/callback',
   passport.authenticate('google', { failureRedirect:'/' }),
-  (req, res) => {
+  async (req, res) => {
     if (
       req.user && req.user.profile && req.user.profile.emails &&
       req.user.profile.emails.find(o => new RegExp('@('+ authorizedDomains+')$').test(o.value))
     ) {
       req.session.token = req.user.token;
+      const account = req.user.profile.emails.find(o => new RegExp('@('+ authorizedDomains+')$').test(o.value));
+      req.session.email = account.value;
+      await req.db.audits.create({
+        email: account.value,
+        action: 'login'
+      });
       res.redirect('/dashboard');
     } else {
       req.session = null;

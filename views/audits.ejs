@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<% include ./partials/layout/head %>
+<body>
+<div class="main-wrapper">
+    <div class="app" id="app">
+        <% include ./partials/layout/header %>
+        <% include ./partials/layout/menu.ejs %>
+        <article class="content">
+            <section class="section">
+                <h1><%= title %></h1>
+                <div class="card">
+                    <div class="card-block">
+                        <table class="table table-sm">
+                            <thead class="thead-default">
+                            <tr>
+                                <th>Created at</th>
+                                <th>Email</th>
+                                <th>Action</th>
+                                <th>Table</th>
+                                <th>Data</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <% audits.forEach(function(audit) { %>
+                            <tr id="<%= audit.id %>">
+                                <td><%= moment(audit.created_at).format(moment_format) %></td>
+                                <td><%= audit.email %></td>
+                                <td><%= audit.action %></td>
+                                <td><%= audit.table %></td>
+                                <td><%= audit.data %></td>
+                            </tr>
+                            <% }); %>
+                            </tbody>
+                        </table>
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                <% if(page > 1) { %>
+                                <li class="page-item"><a class="page-link" href="/audits?page=<%= (page-1) %>">Previous</a></li>
+                                <% } %>
+                                <% if (showLast) { %>
+                                <li class="page-item"><a class="page-link" href="/audits?page=<%= (page + 1)  %>">Next</a></li>
+                                <% } %>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </section>
+        </article>
+    </div>
+</div>
+<% include ./partials/layout/scripts %>
+</body>
+</html>

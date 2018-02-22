@@ -190,6 +190,12 @@ router.post('/approve', authenticate(), routeMiddleware(async (req) => {
       await req.db.users.update({
         status: 'approved',
       }, { where: { id: req.body['ids[]'] } });
+      await req.db.audits.create({
+        email: req.session.email,
+        action: 'approve',
+        table: 'users',
+        data: req.body['ids[]'].toString()
+      });
     }
     return {
       data: {
@@ -201,15 +207,44 @@ router.post('/approve', authenticate(), routeMiddleware(async (req) => {
 }));
 
 router.post('/reject', authenticate(), routeMiddleware(async (req) => {
-  req.db.users.update({
+  await req.db.users.update({
     status: 'rejected',
   }, { where: { id: req.body['ids[]'] } });
+  await req.db.audits.create({
+    email: req.session.email,
+    action: 'reject',
+    table: 'users',
+    data: req.body['ids[]'].toString()
+  });
   return {
     data: {
       success: true,
       ids: req.body['ids[]'],
     }
   }
+}));
+
+router.get('/audits', authenticate(), routeMiddleware(async (req) => {
+  const page = parseInt(req.query.page) || 1;
+  const count = await req.db.audits.count();
+
+  const audits = await req.db.audits.findAll(
+    {
+      order: [['created_at', 'DESC']],
+      offset: parseInt((page - 1) * elements),
+      limit: elements
+    }
+  );
+
+  return {
+    view: 'audits',
+    data: {
+      page: page,
+      showLast: count > page * elements,
+      title: 'Audits',
+      audits
+    }
+  };
 }));
 
 module.exports = router;
