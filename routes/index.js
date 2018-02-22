@@ -239,10 +239,12 @@ router.post('/search', authenticate(), routeMiddleware(async (req) => {
           {ip: {[Op.like]: `%${search}%`}},
           {fingerprint: {[Op.like]: `%${search}%`}},
         ]
-      },
-      { status },
+      }
     ]
   };
+  if(status !== 'all') {
+    where[Object.getOwnPropertySymbols(where)[0]].push({ status });
+  }
   const count = await req.db.users.count({ where });
   const items = req.body.items || elements;
   const users = await req.db.users.findAll(
