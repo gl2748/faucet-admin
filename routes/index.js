@@ -3,6 +3,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const fetch = require('isomorphic-fetch');
 const Sequelize = require('sequelize');
+const moment = require('moment');
 const authenticate = require('../helpers/middleware').authenticate;
 
 const elements = 25;
@@ -221,13 +222,15 @@ router.get('/search', authenticate(), (req, res, next) => {
     showLast: false,
     search: '',
     status: null,
-    items: elements
+    items: elements,
+    startDate: '',
+    endDate: '',
   });
 });
 
 router.post('/search', authenticate(), routeMiddleware(async (req) => {
   const page = parseInt(req.body.page) || 1;
-  const { search, status } = req.body;
+  const { search, status, startDate, endDate } = req.body;
   const Op = Sequelize.Op;
   const where = {
     [Op.and]: [
@@ -244,6 +247,12 @@ router.post('/search', authenticate(), routeMiddleware(async (req) => {
   };
   if(status !== 'all') {
     where[Object.getOwnPropertySymbols(where)[0]].push({ status });
+  }
+  if(startDate) {
+    where[Object.getOwnPropertySymbols(where)[0]].push({ created_at: { [Op.gte]: moment(startDate, 'YYYYMMDD')} });
+  }
+  if(endDate) {
+    where[Object.getOwnPropertySymbols(where)[0]].push({ created_at: { [Op.lte]: moment(endDate, 'YYYYMMDD')} });
   }
   const count = await req.db.users.count({ where });
   const items = req.body.items || elements;
@@ -265,6 +274,8 @@ router.post('/search', authenticate(), routeMiddleware(async (req) => {
       showLast: count > page * items,
       users,
       search,
+      startDate,
+      endDate,
       status,
       items
     }
