@@ -251,10 +251,10 @@ router.post('/search', authenticate(), routeMiddleware(async (req) => {
     where[Object.getOwnPropertySymbols(where)[0]].push({ status });
   }
   if(startDate) {
-    where[Object.getOwnPropertySymbols(where)[0]].push({ created_at: { [Op.gte]: moment(startDate, 'YYYYMMDD')} });
+    where[Object.getOwnPropertySymbols(where)[0]].push({ created_at: { [Op.gte]: moment(startDate, 'YYYY/MM/DD')} });
   }
   if(endDate) {
-    where[Object.getOwnPropertySymbols(where)[0]].push({ created_at: { [Op.lte]: moment(endDate, 'YYYYMMDD')} });
+    where[Object.getOwnPropertySymbols(where)[0]].push({ created_at: { [Op.lte]: moment(endDate, 'YYYY/MM/DD')} });
   }
   const count = await req.db.users.count({ where });
   const items = req.body.items || elements;
