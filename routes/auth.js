@@ -2,6 +2,7 @@ const express = require('express');
 const passport = require('passport');
 const router = express.Router();
 const config = require('../config.json');
+const { recordAction } = require('../helpers/audits');
 const authorizedDomains = config.google_auth_authorized_domains.join('|');
 
 router.get('/google', passport.authenticate('google', {
@@ -18,10 +19,7 @@ router.get('/google/callback',
       req.session.token = req.user.token;
       const account = req.user.profile.emails.find(o => new RegExp('@('+ authorizedDomains+')$').test(o.value));
       req.session.email = account.value;
-      await req.db.audits.create({
-        email: account.value,
-        action: 'login'
-      });
+      await recordAction(req, 'login');
       res.redirect('/dashboard');
     } else {
       req.session = null;

@@ -3,7 +3,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const fetch = require('isomorphic-fetch');
 const authenticate = require('../helpers/middleware').authenticate;
-
+const { recordAction } = require('../helpers/audits');
 const elements = 25;
 
 class AppError extends Error {
@@ -190,12 +190,7 @@ router.post('/approve', authenticate(), routeMiddleware(async (req) => {
       await req.db.users.update({
         status: 'approved',
       }, { where: { id: req.body['ids[]'] } });
-      await req.db.audits.create({
-        email: req.session.email,
-        action: 'approve',
-        table: 'users',
-        data: req.body['ids[]'].toString()
-      });
+      await recordAction(req, 'approve', 'users',  req.body['ids[]'].toString());
     }
     return {
       data: {
@@ -210,12 +205,7 @@ router.post('/reject', authenticate(), routeMiddleware(async (req) => {
   await req.db.users.update({
     status: 'rejected',
   }, { where: { id: req.body['ids[]'] } });
-  await req.db.audits.create({
-    email: req.session.email,
-    action: 'reject',
-    table: 'users',
-    data: req.body['ids[]'].toString()
-  });
+  await recordAction(req, 'reject', 'users',  req.body['ids[]'].toString());
   return {
     data: {
       success: true,
