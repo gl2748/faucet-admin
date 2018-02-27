@@ -6,7 +6,7 @@ const Sequelize = require('sequelize');
 const moment = require('moment');
 const authenticate = require('../helpers/middleware').authenticate;
 
-const elements = 25;
+const itemsPerPage = 25;
 
 class AppError extends Error {
   constructor({ type = 'error_api_general', status = 400, cause }) {
@@ -154,8 +154,8 @@ const listUser = async(req, options) => {
   const users = await req.db.users.findAll(
     {
       order: [['updated_at', 'DESC']],
-      offset: parseInt((page - 1) * elements),
-      limit: elements,
+      offset: parseInt((page - 1) * itemsPerPage),
+      limit: itemsPerPage,
       where: options.where
     }
   );
@@ -164,11 +164,13 @@ const listUser = async(req, options) => {
     view: 'users',
     data: {
       page: page,
-      showLast: count > page * elements,
+      showLast: count > page * itemsPerPage,
       location: options.location,
       showActions: options.showActions,
       title: options.title,
-      users: users
+      users: users,
+      maxPage: Math.ceil(count / itemsPerPage),
+      totalElements: count,
     }
   };
 };
