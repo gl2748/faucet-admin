@@ -78,7 +78,6 @@
 <strong>
     Total: <%= totalElements %> users
 </strong>
-<% if(showActions) { %>
 <% include ../components/user-modal %>
 <% include ../components/result-modal %>
 <script type="text/javascript">
@@ -89,14 +88,5 @@
             $(this).prop('checked',status);
           }
         );
-    }
-</script>
-<% } %>
-<script type="text/javascript">
-    function goToPage() {
-        var page = $('#page').val();
-        if(parseInt(page) <= parseInt(<%= maxPage %>)) {
-            window.location = '/<%= location %>?page=' + page;
-        }
     }
 </script>
