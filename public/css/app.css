@@ -2767,3 +2767,7 @@ span a {
 .user-table tr td:first-child{
   min-width: 200px;
 }
+
+button {
+    background-color: gray;
+}
