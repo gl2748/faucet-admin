@@ -35,13 +35,22 @@
                                 </div>
                             </div>
                             <div class="row form-group">
-                                <div class="col-6">
+                                <div class="col-5">
                                     <label class="control-label">Start date</label>
                                     <input type="text" id="startDate" name="startDate" class="form-control boxed" value="<%= startDate %>" placeholder="Ex: 02/21/2018" />
                                 </div>
-                                <div class="col-6">
+                                <div class="col-5">
                                     <label class="control-label">End date</label>
                                     <input type="text" id="endDate" name="endDate" class="form-control boxed" value="<%= endDate %>" placeholder="Ex: 03/18/2018" />
+                                </div>
+                                <div class="col-2">
+                                    <label class="control-label">Last days</label>
+                                    <select class="form-control boxed" id="lastDays" onchange="javascript:setRange()">
+                                        <option value=""></option>
+                                        <% for(var i=1; i <= 30; i++) { %>
+                                            <option value="<%= i %>"><%=i %></option>
+                                        <% } %>
+                                    </select>
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-secondary">Search</button>
@@ -111,26 +120,36 @@
 <% include ./components/user-modal %>
 <% include ./components/result-modal %>
 <script type="text/javascript">
-  function toggleAll() {
-    var status = $('#toggleAll').is(':checked');
-    $('input[type="checkbox"]').each(
-      function(o) {
-        $(this).prop('checked',status);
+    function setRange() {
+      if(jQuery('#lastDays').val() !== "") {
+          var days = parseInt(jQuery('#lastDays').val());
+          var d = new Date();
+          d.setDate(d.getDate() - days);
+
+          jQuery('#startDate').val(jQuery.datepicker.formatDate("mm/dd/yy", d));
+          jQuery('#endDate').val(jQuery.datepicker.formatDate("mm/dd/yy", new Date()));
       }
-    );
-  }
-  function goToPage(page) {
-    $('#page').val(page);
-    $('#searchForm').submit();
-  }
-  jQuery(document).ready(function(){
-    $( "#startDate" ).datepicker({
-      dateFormat: "mm/dd/yy"
+    }
+    function toggleAll() {
+        var status = $('#toggleAll').is(':checked');
+        $('input[type="checkbox"]').each(
+            function(o) {
+                $(this).prop('checked',status);
+            }
+        );
+    }
+    function goToPage(page) {
+        $('#page').val(page);
+        $('#searchForm').submit();
+    }
+    jQuery(document).ready(function(){
+        $( "#startDate" ).datepicker({
+          dateFormat: "mm/dd/yy"
+        });
+        $( "#endDate" ).datepicker({
+          dateFormat: "mm/dd/yy"
+        });
     });
-    $( "#endDate" ).datepicker({
-      dateFormat: "mm/dd/yy"
-    });
-  });
 </script>
 </body>
 </html>
