@@ -222,9 +222,11 @@ router.get('/search', authenticate(), (req, res, next) => {
     users: [],
     page: 1,
     showLast: false,
+    maxPage: 0,
+    totalElements: 0,
     search: '',
     status: null,
-    items: elements,
+    items: itemsPerPage,
     startDate: '',
     endDate: '',
   });
@@ -257,7 +259,7 @@ router.post('/search', authenticate(), routeMiddleware(async (req) => {
     where[Object.getOwnPropertySymbols(where)[0]].push({ created_at: { [Op.lte]: moment(endDate, 'YYYYMMDD')} });
   }
   const count = await req.db.users.count({ where });
-  const items = req.body.items || elements;
+  const items = req.body.items || itemsPerPage;
   const users = await req.db.users.findAll(
     {
       order: [['updated_at', 'DESC']],
@@ -274,6 +276,8 @@ router.post('/search', authenticate(), routeMiddleware(async (req) => {
       title: 'Search database',
       page,
       showLast: count > page * items,
+      maxPage: Math.ceil(count / items),
+      totalElements: count,
       users,
       search,
       startDate,

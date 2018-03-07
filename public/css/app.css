@@ -2783,3 +2783,9 @@ span a {
 .pagination li {
   line-height: 40px;
 }
+button {
+  cursor: pointer;
+}
+.page-link {
+  cursor: pointer;
+}
